@@ -5,15 +5,8 @@
     - name: install lamp packages
       become: yes
       become_method: sudo
-      shell: apt-get install {{ item }}
-      args:
-        executable: /bin/bash
-      become: true 
-      with_items:
-        - apache2
-        - mysql-server
-        - php5-mysql
-        - php5
+     - name: install apache2
+      apt: name=apache2 update_cache=yes state=latest
       
     - name: start services
       service: name= {{ item }} state=started enabled=yes
@@ -21,8 +14,7 @@
       become_method: sudo
       with_items:
         - apache2
-        - mysql
-
+       
     - name: deploy index.html
       become: yes
       become_method: sudo
