@@ -14,14 +14,16 @@
 
     - name: start services
       service: name={{ item }} state=started enabled=yes
-      sudo: yes
+      become: yes
+      become_user: root
       with_items:
         - apache2
         - mysql
 
     - name: deploy index.html
-      sudo: yes
+      become: yes
+      become_user: root
       copy:
-        src: index.html
+        src: /home/MIQDIGITAL/nandeesh/lamp/awxansible/index.html
         dest: /var/www/html/index.html
        
