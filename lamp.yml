@@ -4,13 +4,9 @@
   tasks:
     - name: install lamp stack
       become: yes
-      become_user: root
-      apt: pkg= "{{ item }}" state=present
+      become_method: sudo
+      apt: name= "{{ item }}" state=present
       with_items:
-        - libnss3
-        - libasound2
-        - xcb
-        - xinit
         - apache2
         - mysql-server
         - php7.0
@@ -19,15 +15,15 @@
     - name: start services
       service: name= "{{ item }}" state=started enabled=yes
       become: yes
-      become_user: root
+      become_method: sudo
       with_items:
         - apache2
         - mysql
 
     - name: deploy index.html
       become: yes
-      become_user: root
+      become_method: sudo
       copy:
-        src: /home/MIQDIGITAL/nandeesh/lamp/awxansible/index.html
+        src: index.html
         dest: /var/www/html/index.html
        
