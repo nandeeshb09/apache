@@ -1,6 +1,6 @@
 ---
 # Setup LAMP Stack
-- hosts: all
+- hosts: localhost
   tasks:
     - name: install lamp packages
       become: yes
