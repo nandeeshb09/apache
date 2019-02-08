@@ -5,7 +5,7 @@
     - name: install lamp packages
       become: yes
       become_method: sudo
-      command: apt-get install {{ item }}
+      apt: name={{ item }} update_cache=yes state=latest
       with_items:
         - apache2
         - mysql-server
