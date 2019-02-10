@@ -3,7 +3,12 @@
   become_method: sudo
   tasks:
     - name: install apache2
-      apt: name=apache2 state=latest
+      apt: name=apache2 state=latest update_cache=yes cache_valid_time=3600
+      register: apt_result
+      until: apt_result|success
+      retries: 3
+      delay: 1
+      ignore_errors: yes
 
     - name: enabled mod_rewrite
       apache2_module: name=rewrite state=present
