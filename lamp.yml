@@ -5,7 +5,7 @@
     - name: install lamp packages
       become: yes
       become_method: sudo
-      apt: name=apache2 update_cache=yes state=latest
+      apt: pkg=apache2 state=installed update_cache=true
       
     - name: start services
       service: name= {{ item }} state=started enabled=yes
