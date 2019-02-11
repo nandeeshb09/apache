@@ -1,7 +1,7 @@
 ---
 test_name: setup-minikube
 
-apt_packages:
+packages:
     - docker.io
 
 curl_packages:
