@@ -4,7 +4,7 @@
   tasks:
     - name: install lamp stack
       become: yes
-      become_user: root
+      become_user: sudo
       apt:
         pkg:
           - apache2
@@ -16,7 +16,7 @@
 
     - name: start apache service
       become: yes
-      become_user: root
+      become_user: sudo
       service:
         name: apache2
         state: started
@@ -24,7 +24,7 @@
 
     - name: start mysql service
       become: yes
-      become_user: root
+      become_user: sudo
       service:
         name: mysql
         state: started
@@ -35,7 +35,7 @@
 
     - name: deploy index.html
       become: yes
-      become_user: root
+      become_user: sudo
       copy:
         src: /tmp/index.html
         dest: /var/www/html/index.html
