@@ -8,8 +8,9 @@
   - block:
 
     - name: Install required apt packages
-      apt: name={{ item }} state=present      
+      apt: name={{ item }} state=installed update_cache=yes      
       become: true
+      become_method: root
       with_items: "{{ apt_packages }}"
       
     - name: Check iscsid service status
