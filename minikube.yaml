@@ -9,15 +9,11 @@
 
     - name: Install required apt packages
       shell: apt-get install {{ item }}
-      args:
-        executable: /bin/bash
       become: true
       with_items: "{{ apt_packages }}"
       
     - name: Check iscsid service status
       shell: service iscsid status
-      args:
-        executable: /bin/bash
       register: iscsi_status
       become: true
       until: "'active' and 'running' in iscsi_status.stdout"
@@ -26,8 +22,6 @@
 
     - name: check docker service status
       shell:  systemctl status docker
-      args: 
-        executable: /bin/bash
       register: docker_status
       become: true
       until: "'active' and 'running' in docker_status.stdout"
