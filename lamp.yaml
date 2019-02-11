@@ -5,36 +5,32 @@
     - name: install lamp stack
       become: yes
       become_user: root
+      
+    - name: install httpd
       yum:
-        pkg:
-          - httpd
-          - mysql-server
-          - php7.0-mysql
-        state: present
-        update_cache: yes
+        name: httpd
 
-    - name: start apache service
-      become: yes
-      become_user: root
+    - name: install php and maria db
+      yum: name={{item}} state=installed
+      with_items:  
+      - php
+      - php-mysql
+      - php-pdo
+      - php-gd
+      - php-mbstring
+      - mariadb-server
+      - mariadb
+
+    - name: copy file
+      shell: echo "<?php phpinfo (); ?>" > /var/www/html/info.php
+
+    - name: install mariadb
+      yum: name={{item}} state=installed
+      with_items:
+      - mariadb-server
+      - mariadb
+    
+    - name: restart httpd
       service:
         name: httpd
-        state: started
-        enabled: yes
-
-    - name: start mysql service
-      become: yes
-      become_user: root
-      service:
-        name: mysql
-        state: started
-        enabled: yes
-
-    - name: create target directory
-      file: path=/var/www/html state=directory mode=0755
-
-    - name: deploy index.html
-      become: yes
-      become_user: root
-      copy:
-        src: /tmp/index.html
-        dest: /var/www/html/index.html
+        state: restarted
