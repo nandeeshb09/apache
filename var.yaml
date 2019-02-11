@@ -1,8 +1,8 @@
 ---
 test_name: setup-minikube
 
-packages:
-    - docker.io
+#packages:
+    #- docker.io
 
 curl_packages:
     - -Lo minikube https://storage.googleapis.com/minikube/releases/v0.24.1/minikube-linux-amd64
