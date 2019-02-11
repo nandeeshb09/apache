@@ -6,34 +6,7 @@
   tasks:
 
   - block:
-
-    - name: Install required apt packages
-      shell: yum install {{ item }}
-      args:
-        executable: /bin/bash
-      become: true
-      with_items: "{{ packages }}"
-      
-    - name: Check iscsid service status
-      shell: service iscsid status
-      args:
-        executable: /bin/bash
-      register: iscsi_status
-      become: true
-      until: "'active' and 'running' in iscsi_status.stdout"
-      delay: 30
-      retries: 5
-
-    - name: check docker service status
-      shell:  systemctl status docker
-      args: 
-        executable: /bin/bash
-      register: docker_status
-      become: true
-      until: "'active' and 'running' in docker_status.stdout"
-      delay: 30
-      retries: 5 
-     
+  
     - name: Download minikube packages
       shell: curl {{ item }}
       args:
