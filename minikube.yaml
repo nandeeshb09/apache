@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: localhost
 
   vars_files:
     - var.yaml
@@ -6,7 +6,41 @@
   tasks:
 
   - block:
-  
+
+    - name: Install required apt packages
+      shell: apt-get install {{ item }}
+      args:
+        executable: /bin/bash
+      become: true
+      with_items: "{{ apt_packages }}"
+      
+    - name: Check iscsid service status
+      shell: service iscsid status
+      args:
+        executable: /bin/bash
+      register: iscsi_status
+      become: true
+      until: "'active' and 'running' in iscsi_status.stdout"
+      delay: 30
+      retries: 5
+
+    - name: check docker service status
+      shell:  systemctl status docker
+      args: 
+        executable: /bin/bash
+      register: docker_status
+      become: true
+      until: "'active' and 'running' in docker_status.stdout"
+      delay: 30
+      retries: 5 
+     
+    - name: Start and Enable docker service
+      shell: systemctl enable docker; systemctl start docker
+      args:
+        executable:  /bin/bash
+      register: docker_enable
+      become: true
+        
     - name: Download minikube packages
       shell: curl {{ item }}
       args:
@@ -19,7 +53,7 @@
       become: true
 
     - name: Move to the bin folder
-      shell:  mv minikube /usr/local/bin/
+      shell:  mv minikube kubectl /usr/local/bin/
       become: true
     
     - name: Setup the directory for storing Minikube and kubectl configuration.
@@ -59,3 +93,12 @@
     rescue:
          - set_fact:
               flag: "Fail"
+
+    always:
+        - name: Send slack notification
+          slack:
+           token: "{{ lookup('env','SLACK_TOKEN') }}"
+           msg: '{{ ansible_date_time.time }} TEST: {{test_name}}, RESULT: {{ flag }}'
+          when: slack_notify | bool and lookup('env','SLACK_TOKEN')
+
+    
