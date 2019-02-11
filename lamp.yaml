@@ -1,0 +1,33 @@
+---
+# Setup LAMP Stack
+- hosts: localhost
+  tasks:
+    - name: install lamp stack
+      become: yes
+      become_user: root
+      yum:
+        name: httpd
+    - name: install php and maria db
+      yum: name={{item}} state=installed
+      with_items:  
+      - php
+      - php-mysql
+      - php-pdo
+      - php-gd
+      - php-mbstring
+      - mariadb-server
+      - mariadb
+
+    - name: copy file
+      shell: echo "<?php phpinfo (); ?>" > /var/www/html/info.php
+
+    - name: install mariadb
+      yum: name={{item}} state=installed
+      with_items:
+      - mariadb-server
+      - mariadb
+    
+    - name: restart httpd
+      service:
+        name: httpd
+        state: restarted
