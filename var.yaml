@@ -1,10 +1,10 @@
 ---
 test_name: setup-minikube
 
-#packages:
-    #- docker.io
+apt_packages:
+    - open-iscsi
+    - docker.io
 
 curl_packages:
     - -Lo minikube https://storage.googleapis.com/minikube/releases/v0.24.1/minikube-linux-amd64
-      #- -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-
+    - -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
