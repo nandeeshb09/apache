@@ -5,11 +5,8 @@
     - name: install lamp stack
       become: yes
       become_user: root
-      
-    - name: install httpd
       yum:
         name: httpd
-
     - name: install php and maria db
       yum: name={{item}} state=installed
       with_items:  
