@@ -5,9 +5,9 @@
     - name: install lamp stack
       become: yes
       become_user: root
-      apt:
+      yum:
         pkg:
-          - apache2
+          - httpd
           - mysql-server
           - php7.0-mysql
         state: present
@@ -17,7 +17,7 @@
       become: yes
       become_user: root
       service:
-        name: apache2
+        name: httpd
         state: started
         enabled: yes
 
