@@ -19,7 +19,7 @@
       become: true
 
     - name: Move to the bin folder
-      shell:  mv minikube kubectl /usr/local/bin/
+      shell:  mv minikube /usr/local/bin/
       become: true
     
     - name: Setup the directory for storing Minikube and kubectl configuration.
@@ -36,7 +36,7 @@
         echo 'export MINIKUBE_WANTREPORTERRORPROMPT=false' >> ~/.profile
         echo 'export MINIKUBE_HOME=$HOME' >> ~/.profile
         echo 'export CHANGE_MINIKUBE_NONE_USER=true' >> ~/.profile
-        #echo 'export KUBECONFIG=$HOME/.kube/config' >> ~/.profile
+        echo 'export KUBECONFIG=$HOME/.kube/config' >> ~/.profile
       become: true
 
     - name: Start Minikube with option vm-driver=none
