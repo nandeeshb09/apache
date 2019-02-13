@@ -1,10 +1,10 @@
---- 
-- hosts: all
-  become: yes
-  become_method: root
-  tasks: 
-  - name: ensure apache is at the latest version 
-    shell: apt install {{ item }}
-    with_items:
+---
+- hosts: all 
+  become: True 
+  tasks:
+    - name: ensure apache is at the latest version 
+      apt: 
+        name: "{{ item }}" 
+      update_cache: yes 
+      with_items:
         - apache2
-      
