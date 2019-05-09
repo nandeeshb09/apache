@@ -6,21 +6,6 @@
       apt:
         name: apt-transport-https
         state: installed
-      apt: 
-       name: ca-certificates 
-       state: installed
-      apt: 
-       name: curl 
-       state: installed
-      apt: 
-       name: software-properties-common 
-       state:installed
-      apt: 
-       name: virtualbox 
-       state: installed
-      apt: 
-       name:  virtualbox-ext-pack 
-       state: installed
     - name: Disable Swap
       command: swapoff -a
     - name:    Add Docker GPG key
