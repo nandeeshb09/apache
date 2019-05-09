@@ -6,19 +6,19 @@
       apt:
         name: apt-transport-https
         state: installed
-    - apt: 
+      apt: 
        name: ca-certificates 
        state: installed
-    - apt: 
+      apt: 
        name: curl 
        state: installed
-    - apt: 
+      apt: 
        name: software-properties-common 
        state:installed
-    - apt: 
+      apt: 
        name: virtualbox 
        state: installed
-    - apt: 
+      apt: 
        name:  virtualbox-ext-pack 
        state: installed
     - name: Disable Swap
