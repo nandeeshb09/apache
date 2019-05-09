@@ -1,7 +1,6 @@
 ---
 - hosts: all
   become: yes
-  become_user: sudo
   tasks:
     - name: Install Packages For Docker
       apt:
