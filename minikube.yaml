@@ -1,0 +1,64 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  connection: local
+  tasks:
+    - name: Install Packages For Docker
+      apt:
+        name: "{{ item }}"
+        state: installed
+      with_items:
+       - apt-transport-https
+       - ca-certificates
+       - curl
+       - software-properties-common
+       - virtualbox
+       - virtualbox-ext-pack
+    - name: Disable Swap
+      command: swapoff -a
+    - name:    Add Docker GPG key
+      apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+    - name:    Add Docker APT repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+    - name:    Install Docker
+      apt:     name=docker-ce
+    - name: Download CRICTL
+      get_url:
+        url: https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.14.0/crictl-v1.14.0-linux-amd64.tar.gz
+        dest: /tmp
+    - name: Unzip CRICTL
+      command: tar zxvf /tmp/crictl-v1.14.0-linux-amd64.tar.gz -C /usr/bin
+    - name: Add Key
+      shell: curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    - name: Create file for Kubernetes Repo
+      file:
+         path: /etc/apt/sources.list.d/kubernetes.list
+         state: touch
+    - name: Transfer Deb Package to kubernetes.list
+      shell: echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+    - name: Update packages
+      shell: apt-get update
+      #  upgrade: dist
+    - name: Install kubectl
+      apt: name=kubectl
+    - name: Start Docker Service
+      systemd:
+       name: docker
+       state: started
+       enabled: yes
+    - name: Set sysctl
+      sysctl:
+        name: net.bridge.bridge-nf-call-iptables
+        value: 1
+        sysctl_set: yes
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: yes
+    - name: Download Minikube
+      get_url:
+        url: "https://storage.googleapis.com/minikube/releases/v0.34.0/minikube-linux-amd64"
+        dest: /usr/bin/minikube
+        mode: 0755
+    - name: Initialize Minikube
+      shell: minikube start --kubernetes-version v1.11.0
